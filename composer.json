@@ -1,0 +1,46 @@
+{
+    "name": "t3s/content-consent",
+    "type": "typo3-cms-extension",
+    "description": "Need description ...",
+    "authors": [
+        {
+            "name": "Helmut Hackbarth",
+            "role": "Developer"
+        }
+    ],
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "typo3/cms-core": "^11.5"
+    },
+    "require-dev": {
+        "typo3/testing-framework": "^6.9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "T3S\\ContentConsent\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "T3S\\ContentConsent\\Tests\\": "Tests"
+        }
+    },
+    "replace": {
+        "typo3-ter/content-consent": "self.version"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "web-dir": ".Build/public",
+            "extension-key": "content_consent"
+        }
+    }
+}

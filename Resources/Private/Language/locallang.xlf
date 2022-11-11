@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:content_consent/Resources/Private/Language/locallang.xlf" date="2022-11-06T11:14:18Z" product-name="content_consent">
+		<header/>
+		<body>
+			<trans-unit id="tx_contentconsent_domain_model_consent" resname="tx_contentconsent_domain_model_consent">
+				<source>Consent</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

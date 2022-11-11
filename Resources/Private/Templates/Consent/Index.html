@@ -1,0 +1,75 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+<f:section name="content">
+<f:flashMessages />
+<f:comment>
+<!--
+If you need lazy load JS, you have to outsource this template and adapt the following:
+
+- <f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
++ <f:asset.script identifier="t3s-contentConsent" src="fileadmin/your/path/contentconsent.js" />
+
+... more info in the file contentconsent.js
+-->
+</f:comment>
+<div id="content-{settings.consent.contentByUid}" data-lazy="{lazyLoad}"
+	 class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" >
+<f:if condition="{contentConsent}">
+	<f:then>
+		<f:cObject typoscriptObjectPath="lib.contentByUid" data="{settings.consent.contentByUid}" />
+	</f:then>
+	<f:else>
+		<f:if condition="{settings.consent.contentByUid}">
+			<f:then>
+				<f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
+				<f:if condition="{thumbnail}">
+					<f:then>
+						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}" 
+							style="background: url({f:uri.image(image: '{thumbnail}')}) no-repeat center; background-size: cover;
+								{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">						
+							<f:render section="Overlay" arguments="{_all}" />	
+						</div>
+					</f:then>
+					<f:else>
+						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
+							{f:if(condition: settings.consent.height, then: ' style="min-height: {settings.consent.height}px"')}>
+							<f:render section="Overlay" arguments="{_all}" />	
+						</div>
+					</f:else>
+				</f:if>
+			</f:then>
+			<f:else>
+				<div class="alert alert-danger" role="alert">
+					No content is selected to be loaded!
+				</div>
+			</f:else>
+		</f:if>
+	</f:else>
+</f:if>
+</div>
+</f:section>
+</html>
+
+
+<f:section name="Overlay">
+<div class="card-img-overlay d-flex">
+	<div class="align-self-center w-100">
+		<f:if condition="{settings.consent.text}">
+			<div class="bodytext text-center">
+				{settings.consent.text -> f:format.html()}
+			</div>
+		</f:if>
+		<div class="d-flex">
+			<button 
+				id="trigger-button-{settings.consent.contentByUid}" 
+				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto" 
+				type="button" 
+				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{settings.ajaxTypeNum}')}"
+				onclick="ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie}); return false;"
+			>
+				{settings.consent.button}
+			</button>
+		</div>
+	</div>
+</div>
+</f:section>
