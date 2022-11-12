@@ -5,7 +5,7 @@
 [![Monthly Downloads](https://poser.pugx.org/t3s/content_consent/d/monthly)](https://packagist.org/packages/t3s/content_consent)
 [![License](https://poser.pugx.org/t3s/content_consent/license)](https://packagist.org/packages/t3s/content_consent)
 
-> Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! Best used with Bootstrap 5.
+> Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps or YouTube videos GDPR/DSGVO compliant. Best used with Bootstrap 5.
 
 ## 1. Usage
 
