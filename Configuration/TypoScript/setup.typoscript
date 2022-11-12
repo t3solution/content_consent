@@ -26,3 +26,9 @@ ajaxCall {
 }
 
 
+lib.contentByUid = RECORDS
+lib.contentByUid {
+	tables = tt_content
+	source.current = 1
+	dontCheckPid = 1
+}
