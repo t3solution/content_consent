@@ -12,7 +12,7 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 ... more info in the file contentconsent.js
 -->
 </f:comment>
-<div id="content-{settings.consent.contentByUid}" data-lazy="{lazyLoad}"
+<div id="content-{settings.consent.contentByUid}" data-lazy="{t3sb.lazyLoad}" data-lightbox="{t3sb.lightboxSelection}"
 	 class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" >
 <f:if condition="{contentConsent}">
 	<f:then>
@@ -24,16 +24,16 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 				<f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
 				<f:if condition="{thumbnail}">
 					<f:then>
-						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}" 
+						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
 							style="background: url({f:uri.image(image: '{thumbnail}')}) no-repeat center; background-size: cover;
-								{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">						
-							<f:render section="Overlay" arguments="{_all}" />	
+								{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+							<f:render section="Overlay" arguments="{_all}" />
 						</div>
 					</f:then>
 					<f:else>
 						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
 							{f:if(condition: settings.consent.height, then: ' style="min-height: {settings.consent.height}px"')}>
-							<f:render section="Overlay" arguments="{_all}" />	
+							<f:render section="Overlay" arguments="{_all}" />
 						</div>
 					</f:else>
 				</f:if>
@@ -47,6 +47,9 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 	</f:else>
 </f:if>
 </div>
+<f:if condition="{t3sb.image} && {t3sb.lightboxSelection}">
+	<f:render section="Lightbox" arguments="{_all}" />
+</f:if>
 </f:section>
 </html>
 
@@ -60,10 +63,10 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 			</div>
 		</f:if>
 		<div class="d-flex">
-			<button 
-				id="trigger-button-{settings.consent.contentByUid}" 
-				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto" 
-				type="button" 
+			<button
+				id="trigger-button-{settings.consent.contentByUid}"
+				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto"
+				type="button"
 				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{settings.ajaxTypeNum}')}"
 				onclick="ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie}); return false;"
 			>
@@ -73,3 +76,54 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 	</div>
 </div>
 </f:section>
+
+
+<f:section name="Lightbox">
+<f:comment> Lightbox - use with EXT:t3sbootstrap</f:comment>
+<f:comment> Baguette Box </f:comment>
+<f:if condition="{t3sb.lightboxSelection} == 1">
+	<f:if condition="{t3sb.cdn}">
+		<f:then>
+			<f:asset.css identifier="t3sblightboxCss"
+				href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/{t3sb.lightboxVersion}/baguetteBox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS"
+				src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/{t3sb.lightboxVersion}/baguetteBox.min.js" />
+		</f:then>
+		<f:else>
+			<f:asset.css identifier="t3sblightboxCss" href="fileadmin/T3SB/Resources/Public/CSS/baguetteBox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS" src="fileadmin/T3SB/Resources/Public/JS/baguetteBox.min.js" />
+		</f:else>
+	</f:if>
+</f:if>
+<f:comment> Halkabox </f:comment>
+<f:if condition="{t3sb.lightboxSelection} == 2">
+	<f:if condition="{t3sb.cdn}">
+		<f:then>
+			<f:asset.css identifier="t3sblightboxCss"
+				href="https://cdn.jsdelivr.net/npm/halkabox@{t3sb.lightboxVersion}/dist/halkaBox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS"
+				src="https://cdn.jsdelivr.net/npm/halkabox@{t3sb.lightboxVersion}/dist/halkaBox.min.js" />
+		</f:then>
+		<f:else>
+			<f:asset.css identifier="t3sblightboxCss" href="fileadmin/T3SB/Resources/Public/CSS/halkaBox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS" src="fileadmin/T3SB/Resources/Public/JS/halkaBox.min.js" />
+		</f:else>
+	</f:if>
+</f:if>
+<f:comment> G Lightbox </f:comment>
+<f:if condition="{t3sb.lightboxSelection} == 3">
+	<f:if condition="{t3sb.cdn}">
+		<f:then>
+			<f:asset.css identifier="t3sblightboxCss"
+				href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS"
+				src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js" />
+		</f:then>
+		<f:else>
+			<f:asset.css identifier="t3sblightboxCss" href="fileadmin/T3SB/Resources/Public/CSS/glightbox.min.css" />
+			<f:asset.script identifier="t3sblightboxJS" src="fileadmin/T3SB/Resources/Public/JS/glightbox.min.js" />
+		</f:else>
+	</f:if>
+</f:if>
+</f:section>
+
