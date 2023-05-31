@@ -12,6 +12,7 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 ... more info in the file contentconsent.js
 -->
 </f:comment>
+
 <div id="content-{settings.consent.contentByUid}" data-lazy="{t3sb.lazyLoad}" data-lightbox="{t3sb.lightboxSelection}"
 	 class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" >
 <f:if condition="{contentConsent}">
@@ -67,7 +68,7 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 				id="trigger-button-{settings.consent.contentByUid}"
 				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto"
 				type="button"
-				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{settings.ajaxTypeNum}')}"
+				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{typeNum}')}"
 				onclick="ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie}); return false;"
 			>
 				{settings.consent.button}

@@ -1,9 +1,9 @@
 # TYPO3 Extension ``content_consent``
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/t3sbootstrap)
-[![Latest Stable Version](https://poser.pugx.org/t3s/content_consent/v/stable)](https://packagist.org/packages/t3s/content-consent)
-[![Monthly Downloads](https://poser.pugx.org/t3s/content_consent/d/monthly)](https://packagist.org/packages/t3s/content-consent)
-[![License](https://poser.pugx.org/t3s/content_consent/license)](https://packagist.org/packages/t3s/content-consent)
+[![Latest Stable Version](https://poser.pugx.org/t3s/content_consent/v/stable)](https://packagist.org/packages/t3s/content_consent)
+[![Monthly Downloads](https://poser.pugx.org/t3s/content_consent/d/monthly)](https://packagist.org/packages/t3s/content_consent)
+[![License](https://poser.pugx.org/t3s/content_consent/license)](https://packagist.org/packages/t3s/content_consent)
 
 > Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps or YouTube videos GDPR/DSGVO compliant. Best used with Bootstrap 5.
 

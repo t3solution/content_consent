@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace T3S\ContentConsent\Controller;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use Psr\Http\Message\ResponseInterface;
 use T3SBS\T3sbootstrap\Domain\Repository\ConfigRepository;
 
@@ -20,7 +20,7 @@ use T3SBS\T3sbootstrap\Domain\Repository\ConfigRepository;
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
-class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class ConsentController extends ActionController
 {
 
 	/**
@@ -31,15 +31,15 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	public function indexAction(): ResponseInterface
 	{
 		$contentConsent = FALSE;
-		$currentRecord = $this->configurationManager->getContentObject()->data['uid'];
+		$currentRecord = $this->request->getAttribute('currentContentObject')->data['uid'];
 		$thumbnails = null;
 		$t3sbSettings = [];
-
-		if ( $this->settings['consent']['cookie'] && isset($_COOKIE['t3scontentconsent_'.$currentRecord]) && $_COOKIE['t3scontentconsent_'.$currentRecord] == 'allow' ) {
+		if ( $this->settings['consent']['cookie'] && isset($_COOKIE['t3scontentconsent_'.$currentRecord])
+		 && $_COOKIE['t3scontentconsent_'.$currentRecord] == 'allow' ) {
 			$contentConsent = TRUE;
 		} else {
 			$fileRepository = GeneralUtility::makeInstance(FileRepository::class);
-			$thumbnails = $fileRepository->findByRelation('tt_content', 'consentpreviewimage', $currentRecord);
+			$thumbnails = $fileRepository->findByRelation('tt_content', 'settings.consent.thumbnail', $currentRecord);
 			if ( ExtensionManagementUtility::isLoaded('t3sbootstrap') ) {
 				$t3sbSettings = self::getT3sbSettings($fileRepository);
 			}
@@ -49,7 +49,8 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			'currentRecord' => $currentRecord,
 			'contentConsent' => $contentConsent,
 			'thumbnail' => empty($thumbnails[0]) ? FALSE : $thumbnails[0],
-			't3sb' => $t3sbSettings
+			't3sb' => $t3sbSettings,
+			'typeNum' => (int) $this->settings['ajaxTypeNum']
 		];
 		$this->view->assignMultiple($assignedValues);
 
@@ -61,24 +62,27 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	/**
 	 * Displays the selected content with ajax
 	 *
-	 * @return string
 	 */
-	public function ajaxAction(): string
+	public function ajaxAction(): ResponseInterface
 	{
-		$post = GeneralUtility::_POST();
+		$post = $this->request->getParsedBody();
 
 		if ( !empty($post['cookies'])) {
 			$cookieExpire = $this->settings['cookieExpire'] ? (int)$this->settings['cookieExpire'] : 30;
 			setcookie('t3scontentconsent_'.(int)$post['currentRecord'], 'allow', time() + (86400 * $cookieExpire), '/');
 		}
 
-		$cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class, null);
-
 		$conf ['tables'] = 'tt_content';
 		$conf ['source'] = $post['contentByUid'];
 		$conf ['dontCheckPid'] = 1;
 
-		return $cObj->cObjGetSingle ('RECORDS', $conf);
+		$cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
+
+		$data = $cObj->cObjGetSingle('RECORDS', $conf);
+
+		return $this->responseFactory->createResponse()
+			->withHeader('Content-Type', 'application/json')
+			->withBody($this->streamFactory->createStream($data));
 	}
 
 
@@ -96,7 +100,7 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 		$t3sbSettings = ['image'=>FALSE];
 		$content = self::getData($contentByUid);
 
-		if ($content['image_zoom'] && ( $content['assets'] || $content['image'])) {			
+		if ($content['image_zoom'] && ( $content['assets'] || $content['image'])) {
 			$extconf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('t3sbootstrap');
 			$typoscript = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,'t3sbootstrap');
 			$lazyLoad = empty($extconf['lazyLoad']) ? FALSE : TRUE;
@@ -147,7 +151,7 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 				$queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($contentByUid, \PDO::PARAM_INT))
 			)
 			->executeQuery();
-		
+
 		return $result->fetchAssociative();
 	}
 

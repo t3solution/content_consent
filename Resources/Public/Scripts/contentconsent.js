@@ -10,7 +10,6 @@ function ajaxConsentCall(contentByUid, currentRecord, cookies)
 		 if (ajaxCall.readyState === 4) {
 			 if (ajaxCall.status === 200) {
 				 resultContainer.innerHTML = ajaxCall.responseText;
-
 				 // LazyLoad- & lightbox JS for EXT:t3sbootstrap - if you need a custom JS, you have to put it here
 				if (resultContainer.dataset.lazy) {
 						new LazyLoad({
