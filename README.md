@@ -20,4 +20,4 @@ The recommended way to install the extension is by using Composer. In your Compo
 
 Download and install the extension with the extension manager module.
 
-More infos & demos: https://www.t3sbootstrap.de/dokumentation/extensions/content-consent
+More infos & demos: https://www.t3sbootstrap.de/extensions/content-consent
