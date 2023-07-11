@@ -1,0 +1,6 @@
+
+
+
++ default Thumbnail from YouTube or Vimeo or CEs
+
+- Lazyload & lightbox if t3sbootstrap -> you can implement it by yourself in the template
