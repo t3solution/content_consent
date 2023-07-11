@@ -3,16 +3,11 @@ declare(strict_types=1);
 
 namespace T3S\ContentConsent\Controller;
 
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use Psr\Http\Message\ResponseInterface;
-use T3SBS\T3sbootstrap\Domain\Repository\ConfigRepository;
 
 /*
  * This file is part of the TYPO3 extension content_consent.
@@ -31,25 +26,59 @@ class ConsentController extends ActionController
 	public function indexAction(): ResponseInterface
 	{
 		$contentConsent = FALSE;
+		$customThumbnail = [];
+		$defaultThumbnail = [];
+		$properties = [];
+		$extension = '';
+		$type = 0;
 		$currentRecord = $this->request->getAttribute('currentContentObject')->data['uid'];
-		$thumbnails = null;
-		$t3sbSettings = [];
-		if ( $this->settings['consent']['cookie'] && isset($_COOKIE['t3scontentconsent_'.$currentRecord])
+
+		if ( $this->settings['consent']['cookie'] 
+		 && isset($_COOKIE['t3scontentconsent_'.$currentRecord])
 		 && $_COOKIE['t3scontentconsent_'.$currentRecord] == 'allow' ) {
+
 			$contentConsent = TRUE;
+
 		} else {
+
 			$fileRepository = GeneralUtility::makeInstance(FileRepository::class);
-			$thumbnails = $fileRepository->findByRelation('tt_content', 'settings.consent.thumbnail', $currentRecord);
-			if ( ExtensionManagementUtility::isLoaded('t3sbootstrap') ) {
-				$t3sbSettings = self::getT3sbSettings($fileRepository);
+
+			// Custom thumbnail
+			if ( !empty($this->settings['consent']['thumbnail']) ) {
+
+				$relatedCustomThumbnails = $fileRepository->findByRelation('tt_content', 'settings.consent.thumbnail', $currentRecord);
+				$customThumbnail = !empty($relatedCustomThumbnails[0]) ? $relatedCustomThumbnails[0] : [];
+				$defaultThumbnail = [];
+				if ( empty($customThumbnail) ) {
+					// if media is hidden -> use default
+					$defaultThumbnail = $fileRepository->findByRelation('tt_content', 'assets', (int) $this->settings['consent']['contentByUid'])[0];
+				}
+			}
+
+			// Default thumbnail
+			if ( !empty($this->settings['consent']['defaultThumbnail']) ) {
+
+				$relatedDefaultThumbnails = $fileRepository->findByRelation('tt_content', 'assets', (int) $this->settings['consent']['contentByUid']);
+				if ( !empty($relatedDefaultThumbnails[0]) ) {
+					$defaultThumbnail = $relatedDefaultThumbnails[0];
+					$properties = $defaultThumbnail->getOriginalFile()->getProperties();
+					$extension = $properties['extension'];
+					$type = $properties['type'];
+				}
+
+			} else {
+
+				$defaultThumbnail = [];
 			}
 		}
 
 		$assignedValues = [
 			'currentRecord' => $currentRecord,
 			'contentConsent' => $contentConsent,
-			'thumbnail' => empty($thumbnails[0]) ? FALSE : $thumbnails[0],
-			't3sb' => $t3sbSettings,
+			'extension' => $extension,
+			'type' => $type,
+			'customThumbnail' => $customThumbnail,
+			'defaultThumbnail' => $defaultThumbnail,
 			'typeNum' => (int) $this->settings['ajaxTypeNum']
 		];
 		$this->view->assignMultiple($assignedValues);
@@ -77,82 +106,11 @@ class ConsentController extends ActionController
 		$conf ['dontCheckPid'] = 1;
 
 		$cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
-
 		$data = $cObj->cObjGetSingle('RECORDS', $conf);
 
 		return $this->responseFactory->createResponse()
 			->withHeader('Content-Type', 'application/json')
 			->withBody($this->streamFactory->createStream($data));
-	}
-
-
-
-	/**
-	 * Returns settings from EXT:t3sbootstrap if loaded
-	 *
-	 * @param FileRepository $fileRepository
-	 *
-	 * @return array
-	 */
-	private function getT3sbSettings($fileRepository): array
-	{
-		$contentByUid = (int) $this->settings['consent']['contentByUid'];
-		$t3sbSettings = ['image'=>FALSE];
-		$content = self::getData($contentByUid);
-
-		if ($content['image_zoom'] && ( $content['assets'] || $content['image'])) {
-			$extconf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('t3sbootstrap');
-			$typoscript = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT,'t3sbootstrap');
-			$lazyLoad = empty($extconf['lazyLoad']) ? FALSE : TRUE;
-			$cdn = $typoscript['module.']['tx_t3sbootstrap.']['settings.']['cdn.']['enable'];
-			$lightboxSelection = (int) GeneralUtility::makeInstance(ConfigRepository::class)->findAll()[0]->getLightboxSelection();
-			if (empty($lightboxSelection)) {
-				$lightboxSelection = 0;
-			} else {
-				if ($lightboxSelection == 1) {
-					$lightboxVersion = $typoscript['module.']['tx_t3sbootstrap.']['settings.']['cdn.']['baguetteBox'];
-				}
-				if ($lightboxSelection == 2) {
-					$lightboxVersion = $typoscript['module.']['tx_t3sbootstrap.']['settings.']['cdn.']['halkabox'];
-				}
-				if ($lightboxSelection == 3) {
-					$lightboxVersion = $typoscript['module.']['tx_t3sbootstrap.']['settings.']['cdn.']['glightbox'];
-				}
-			}
-
-			$t3sbSettings = [
-				'image'=>TRUE,
-				'lazyLoad'=>$lazyLoad,
-				'cdn'=>$cdn,
-				'lightboxSelection'=>$lightboxSelection,
-				'lightboxVersion'=>$lightboxVersion
-			];
-		}
-
-		return $t3sbSettings;
-	}
-
-
-
-	/**
-	 * Returns data from tt_content
-	 *
-	 * @param int $contentByUid
-	 *
-	 * @return array
-	 */
-	public function getData($contentByUid): array
-	{
-		$queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tt_content');
-		$result = $queryBuilder
-			->select('image_zoom', 'assets', 'image')
-			->from('tt_content')
-			->where(
-				$queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($contentByUid, \PDO::PARAM_INT))
-			)
-			->executeQuery();
-
-		return $result->fetchAssociative();
 	}
 
 }

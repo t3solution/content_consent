@@ -62,27 +62,27 @@
 								<renderType>selectSingle</renderType>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:secondary</numIndex>
+										<numIndex index="0">Secondary</numIndex>
 										<numIndex index="1">secondary</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:primary</numIndex>
+										<numIndex index="0">Primary</numIndex>
 										<numIndex index="1">primary</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:success</numIndex>
+										<numIndex index="0">Success</numIndex>
 										<numIndex index="1">success</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:info</numIndex>
+										<numIndex index="0">Info</numIndex>
 										<numIndex index="1">info</numIndex>
 									</numIndex>
 									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:warning</numIndex>
+										<numIndex index="0">Warning</numIndex>
 										<numIndex index="1">warning</numIndex>
 									</numIndex>
 									<numIndex index="5" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:danger</numIndex>
+										<numIndex index="0">Danger</numIndex>
 										<numIndex index="1">danger</numIndex>
 									</numIndex>
 									<numIndex index="6" type="array">
@@ -94,7 +94,7 @@
 										<numIndex index="1">light</numIndex>
 									</numIndex>
 									<numIndex index="8" type="array">
-										<numIndex index="0">LLL:EXT:t3sbootstrap/Resources/Private/Language/locallang_be.xlf:link</numIndex>
+										<numIndex index="0">Link</numIndex>
 										<numIndex index="1">link</numIndex>
 									</numIndex>
 								</items>
@@ -125,11 +125,23 @@
 						</TCEforms>
 					</settings.consent.cookie>
 
+					<settings.consent.defaultThumbnail>
+						<TCEforms>
+							<label>Default thumbnail from YouTube, Vimeo or Content Element</label>
+							<description>only if "Thumbnail" is not set</description>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.consent.defaultThumbnail>
+
 					<settings.consent.thumbnail>
 						<TCEforms>
 							<label>Thumbnail (background-image)</label>
 							<config>
 								<type>inline</type>
+								<maxitems>1</maxitems>
 								<foreign_table>sys_file_reference</foreign_table>
 								<foreign_field>uid_foreign</foreign_field>
 								<foreign_sortby>sorting_foreign</foreign_sortby>
