@@ -3,7 +3,7 @@
 <f:layout name="Default" />
 <f:section name="content">
 <f:flashMessages />
-<div id="content-{settings.consent.contentByUid}" class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" >
+<div id="content-{settings.consent.contentByUid}" class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" data-hash="{hash}" >	
 <f:if condition="{contentConsent}">
 	<f:then>
 		<f:cObject typoscriptObjectPath="lib.contentByUid" data="{settings.consent.contentByUid}" />
@@ -38,23 +38,21 @@
 								</div>
 							</f:then>
 							<f:else>
-
-					<f:if condition="{defaultThumbnail.originalFile.properties.identifier}">
-						<f:then>
-							<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-							 style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
-							{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
-								<f:render section="Overlay" arguments="{_all}" />
-							</div>
-						</f:then>
-						<f:else>
-							<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-						 	style="{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
-								<f:render section="Overlay" arguments="{_all}" />
-							</div>
-						</f:else>
-					</f:if>
-
+								<f:if condition="{defaultThumbnail.originalFile.properties.identifier}">
+									<f:then>
+										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
+										 style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
+										{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+											<f:render section="Overlay" arguments="{_all}" />
+										</div>
+									</f:then>
+									<f:else>
+										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
+									 	style="{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+											<f:render section="Overlay" arguments="{_all}" />
+										</div>
+									</f:else>
+								</f:if>
 							</f:else>
 						</f:if>
 					</f:else>

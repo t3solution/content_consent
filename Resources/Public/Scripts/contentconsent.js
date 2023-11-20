@@ -1,7 +1,8 @@
 
-function ajaxConsentCall(contentByUid, currentRecord, cookies) 
+function ajaxConsentCall(contentByUid, currentRecord, cookies)
 {
-	let resultContainer = document.getElementById('content-'+contentByUid)
+	let resultContainer = document.getElementById('content-'+contentByUid),
+		hash = resultContainer.getAttribute('data-hash'),
 		button = document.getElementById('trigger-button-'+contentByUid),
 		url = button.dataset.url,
 		ajaxCall = new XMLHttpRequest();
@@ -18,6 +19,5 @@ function ajaxConsentCall(contentByUid, currentRecord, cookies)
 
 	ajaxCall.open('POST', url);
 	ajaxCall.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	ajaxCall.send('contentByUid='+contentByUid+'&currentRecord='+currentRecord+'&cookies='+cookies);
+	ajaxCall.send('contentByUid='+contentByUid+'&currentRecord='+currentRecord+'&cookies='+cookies+'&hash='+hash);
 }
-	
