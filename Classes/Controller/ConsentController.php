@@ -45,10 +45,13 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 			}
 		}
 
+		$hash = GeneralUtility::hmac($this->settings['consent']['contentByUid'], self::class);
+
 		$assignedValues = [
 			'currentRecord' => $currentRecord,
 			'contentConsent' => $contentConsent,
 			'thumbnail' => empty($thumbnails[0]) ? FALSE : $thumbnails[0],
+			'hash' => $hash,
 			't3sb' => $t3sbSettings
 		];
 		$this->view->assignMultiple($assignedValues);
@@ -65,20 +68,33 @@ class ConsentController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 	 */
 	public function ajaxAction(): string
 	{
+		$success = FALSE;
 		$post = GeneralUtility::_POST();
 
-		if ( !empty($post['cookies'])) {
-			$cookieExpire = $this->settings['cookieExpire'] ? (int)$this->settings['cookieExpire'] : 30;
-			setcookie('t3scontentconsent_'.(int)$post['currentRecord'], 'allow', time() + (86400 * $cookieExpire), '/');
+		if (!empty($post)) {
+			$expected = GeneralUtility::hmac($post['contentByUid'], self::class);
+			$success = hash_equals($expected, $post['hash']);
+		}
+		
+		if (!empty($success)) {
+
+			if ( !empty($post['cookies'])) {
+				$cookieExpire = $this->settings['cookieExpire'] ? (int)$this->settings['cookieExpire'] : 30;
+				setcookie('t3scontentconsent_'.(int)$post['currentRecord'], 'allow', time() + (86400 * $cookieExpire), '/');
+			}
+
+			$conf ['tables'] = 'tt_content';
+			$conf ['source'] = (int)$post['contentByUid'];
+			$conf ['dontCheckPid'] = 1;
+
+			$cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class, null);
+
+			return $cObj->cObjGetSingle ('RECORDS', $conf);				
+
+		} else {
+			return '<div class="alert alert-danger" role="alert">No Success!</div>';
 		}
 
-		$cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class, null);
-
-		$conf ['tables'] = 'tt_content';
-		$conf ['source'] = $post['contentByUid'];
-		$conf ['dontCheckPid'] = 1;
-
-		return $cObj->cObjGetSingle ('RECORDS', $conf);
 	}
 
 
