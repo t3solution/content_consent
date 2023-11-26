@@ -13,7 +13,7 @@ If you need lazy load JS, you have to outsource this template and adapt the foll
 -->
 </f:comment>
 <div id="content-{settings.consent.contentByUid}" data-lazy="{t3sb.lazyLoad}" data-lightbox="{t3sb.lightboxSelection}"
-	 class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" >
+	 class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" data-hash="{hash}" >
 <f:if condition="{contentConsent}">
 	<f:then>
 		<f:cObject typoscriptObjectPath="lib.contentByUid" data="{settings.consent.contentByUid}" />
