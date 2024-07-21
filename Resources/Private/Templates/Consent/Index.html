@@ -1,9 +1,16 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	xmlns:t3s="http://typo3.org/ns/T3S\ContentConsent/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers data-namespace-typo3-fluid="true">
 <f:layout name="Default" />
 <f:section name="content">
 <f:flashMessages />
-<div id="content-{settings.consent.contentByUid}" class="w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" data-hash="{hash}" >	
+<f:if condition="{settings.consent.height}">
+    <f:then>
+		<f:variable name="minHeight">{settings.consent.height}px</f:variable>
+    </f:then>
+    <f:else>
+		<f:variable name="minHeight">100%</f:variable>
+    </f:else>
+</f:if>
+<div id="content-{settings.consent.contentByUid}" class="mainframe w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" style="min-height:{minHeight}" data-hash="{hash}" data-removeratio="{settings.consent.removeRatio}">
 <f:if condition="{contentConsent}">
 	<f:then>
 		<f:cObject typoscriptObjectPath="lib.contentByUid" data="{settings.consent.contentByUid}" />
@@ -15,8 +22,7 @@
 				<f:if condition="{customThumbnail}">
 					<f:then>
 						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-							 style="background: url({f:uri.image(image: '{customThumbnail}')}) no-repeat center; background-size: cover;
-								{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+						 style="background: url({f:uri.image(image: '{customThumbnail}')}) no-repeat center; background-size: cover;min-height:{minHeight}">
 							<f:render section="Overlay" arguments="{_all}" />
 						</div>
 					</f:then>
@@ -32,8 +38,7 @@
 									</f:else>
 								</f:if>
 								<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-								 style="background: url({videoThumbnail}) no-repeat center; background-size: cover;
-								{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+							 	 style="background: url({videoThumbnail}) no-repeat center; background-size: cover; min-height:{minHeight}">
 									<f:render section="Overlay" arguments="{_all}" />
 								</div>
 							</f:then>
@@ -41,14 +46,14 @@
 								<f:if condition="{defaultThumbnail.originalFile.properties.identifier}">
 									<f:then>
 										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-										 style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
-										{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+									 	style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
+										min-height:{minHeight}">
 											<f:render section="Overlay" arguments="{_all}" />
 										</div>
 									</f:then>
 									<f:else>
 										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-									 	style="{f:if(condition: settings.consent.height, then: ' min-height: {settings.consent.height}px')}">
+								 		style="min-height:{minHeight}">
 											<f:render section="Overlay" arguments="{_all}" />
 										</div>
 									</f:else>
