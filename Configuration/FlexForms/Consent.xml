@@ -2,239 +2,215 @@
 	<sheets>
 		<sDEF>
 			<ROOT>
-				<TCEforms>
-					<sheetTitle>Settings</sheetTitle>
-				</TCEforms>
+				<sheetTitle>Settings</sheetTitle>
 				<type>array</type>
 				<el>
 					<settings.consent.contentByUid>
-						<TCEforms>
-							<label>Content Consent (loaded by Ajax)</label>
-							<config>
-								<type>group</type>
-								<internal_type>db</internal_type>
-								<allowed>tt_content</allowed>
-								<size>1</size>
-								<maxitems>1</maxitems>
-								<minitems>0</minitems>
-								<show_thumbs>1</show_thumbs>
-								<wizards>
-									<suggest>
-										<type>suggest</type>
-										<default>
-											<searchWholePhrase>1</searchWholePhrase>
-										</default>
-									</suggest>
-								</wizards>
-							</config>
-						</TCEforms>
+						<label>Content Consent (loaded by Ajax)</label>
+						<config>
+							<type>group</type>
+							<allowed>tt_content</allowed>
+							<foreign_table>tt_content</foreign_table>
+							<size>1</size>
+							<maxitems>1</maxitems>
+							<minitems>1</minitems>
+						</config>
 					</settings.consent.contentByUid>
 
 					<settings.consent.text>
-						<TCEforms>
-							<label>Text</label>
-							<description>information for the consent</description>
-							<config>
-								<checkbox>0</checkbox>
-								<type>text</type>
-								<enableRichtext>true</enableRichtext>
-							</config>
-						</TCEforms>
+						<label>Text</label>
+						<description>information for the consent</description>
+						<config>
+							<type>text</type>
+							<enableRichtext>true</enableRichtext>
+						</config>
 					</settings.consent.text>
 
 					<settings.consent.button>
-						<TCEforms>
-							<label>Button Text</label>
-							<config>
-								<checkbox>0</checkbox>
-								<default>Load content</default>
-								<type>input</type>
-								<size>20</size>
-							</config>
-						</TCEforms>
+						<label>Button Text</label>
+						<config>
+							<checkbox>0</checkbox>
+							<default>Load content</default>
+							<type>input</type>
+							<size>20</size>
+						</config>
 					</settings.consent.button>
 
 					<settings.consent.buttonStyle>
-						<TCEforms>
-							<label>Button Style </label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">Secondary</numIndex>
-										<numIndex index="1">secondary</numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">Primary</numIndex>
-										<numIndex index="1">primary</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">Success</numIndex>
-										<numIndex index="1">success</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">Info</numIndex>
-										<numIndex index="1">info</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
-										<numIndex index="0">Warning</numIndex>
-										<numIndex index="1">warning</numIndex>
-									</numIndex>
-									<numIndex index="5" type="array">
-										<numIndex index="0">Danger</numIndex>
-										<numIndex index="1">danger</numIndex>
-									</numIndex>
-									<numIndex index="6" type="array">
-										<numIndex index="0">Dark</numIndex>
-										<numIndex index="1">dark</numIndex>
-									</numIndex>
-									<numIndex index="7" type="array">
-										<numIndex index="0">light</numIndex>
-										<numIndex index="1">light</numIndex>
-									</numIndex>
-									<numIndex index="8" type="array">
-										<numIndex index="0">Link</numIndex>
-										<numIndex index="1">link</numIndex>
-									</numIndex>
-								</items>
-								<default>danger</default>
-							</config>
-						</TCEforms>
+						<label>Button Style </label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0">Secondary</numIndex>
+									<numIndex index="1">secondary</numIndex>
+								</numIndex>
+								<numIndex index="1" type="array">
+									<numIndex index="0">Primary</numIndex>
+									<numIndex index="1">primary</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">Success</numIndex>
+									<numIndex index="1">success</numIndex>
+								</numIndex>
+								<numIndex index="3" type="array">
+									<numIndex index="0">Info</numIndex>
+									<numIndex index="1">info</numIndex>
+								</numIndex>
+								<numIndex index="4" type="array">
+									<numIndex index="0">Warning</numIndex>
+									<numIndex index="1">warning</numIndex>
+								</numIndex>
+								<numIndex index="5" type="array">
+									<numIndex index="0">Danger</numIndex>
+									<numIndex index="1">danger</numIndex>
+								</numIndex>
+								<numIndex index="6" type="array">
+									<numIndex index="0">Dark</numIndex>
+									<numIndex index="1">dark</numIndex>
+								</numIndex>
+								<numIndex index="7" type="array">
+									<numIndex index="0">light</numIndex>
+									<numIndex index="1">light</numIndex>
+								</numIndex>
+								<numIndex index="8" type="array">
+									<numIndex index="0">Link</numIndex>
+									<numIndex index="1">link</numIndex>
+								</numIndex>
+							</items>
+							<default>danger</default>
+						</config>
 					</settings.consent.buttonStyle>
 
 					<settings.consent.extraClass>
-						<TCEforms>
-							<label>Extra Class</label>
-							<description>e.g. "bg-info" for background color (Bootstrap) - or what ever</description>
-							<config>
-								<checkbox>0</checkbox>
-								<type>input</type>
-								<size>20</size>
-							</config>
-						</TCEforms>
+						<label>Extra Class</label>
+						<description>e.g. "bg-info" for background color (Bootstrap) - or what ever</description>
+						<config>
+							<checkbox>0</checkbox>
+							<type>input</type>
+							<size>20</size>
+						</config>
 					</settings.consent.extraClass>
 
 					<settings.consent.cookie>
-						<TCEforms>
-							<label>Set cookie if approved</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
+						<label>Set cookie if approved</label>
+						<config>
+							<type>check</type>
+							<default>1</default>
+						</config>
 					</settings.consent.cookie>
 
 					<settings.consent.defaultThumbnail>
-						<TCEforms>
-							<label>Default thumbnail from YouTube, Vimeo or Content Element</label>
-							<description>only if "Thumbnail" is not set</description>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
+						<label>Default thumbnail from YouTube, Vimeo or Content Element</label>
+						<description>only if available and "Thumbnail" is not set</description>
+						<config>
+							<type>check</type>
+							<default>1</default>
+						</config>
 					</settings.consent.defaultThumbnail>
 
 					<settings.consent.thumbnail>
-						<TCEforms>
-							<label>Thumbnail (background-image)</label>
-							<config>
-								<type>inline</type>
-								<maxitems>1</maxitems>
-								<foreign_table>sys_file_reference</foreign_table>
-								<foreign_field>uid_foreign</foreign_field>
-								<foreign_sortby>sorting_foreign</foreign_sortby>
-								<foreign_table_field>tablenames</foreign_table_field>
-								<foreign_match_fields>
-									<fieldname>consentpreviewimage</fieldname>
-								</foreign_match_fields>
-								<foreign_label>uid_local</foreign_label>
-								<foreign_selector>uid_local</foreign_selector>
-								<overrideChildTca>
-									<columns>
-										<uid_local>
-											<config>
-												<appearance>
-													<elementBrowserType>file</elementBrowserType>
-													<elementBrowserAllowed>gif,jpg,jpeg,png</elementBrowserAllowed>
-												</appearance>
-											</config>
-										</uid_local>
-									</columns>
-								</overrideChildTca>
-								<filter>
-									<userFunc>TYPO3\CMS\Core\Resource\Filter\FileExtensionFilter->filterInlineChildren</userFunc>
-									<parameters>
-										<allowedFileExtensions></allowedFileExtensions>
-										<disallowedFileExtensions></disallowedFileExtensions>
-									</parameters>
-								</filter>
-								<appearance>
-									<useSortable>0</useSortable>
-									<headerThumbnail>
-										<field>uid_local</field>
-										<width>45</width>
-										<height>45c</height>
-									</headerThumbnail>
-									<enabledControls>
-										<info>1</info>
-										<new>0</new>
-										<dragdrop>0</dragdrop>
-										<sort>0</sort>
-										<hide>1</hide>
-										<delete>1</delete>
-									</enabledControls>
-								</appearance>
-							</config>
-						</TCEforms>
+						<label>Thumbnail (background-image)</label>
+						<config>
+							<type>inline</type>
+							<maxitems>1</maxitems>
+							<foreign_table>sys_file_reference</foreign_table>
+							<foreign_field>uid_foreign</foreign_field>
+							<foreign_sortby>sorting_foreign</foreign_sortby>
+							<foreign_table_field>tablenames</foreign_table_field>
+							<foreign_match_fields>
+								<fieldname>consentpreviewimage</fieldname>
+							</foreign_match_fields>
+							<foreign_label>uid_local</foreign_label>
+							<foreign_selector>uid_local</foreign_selector>
+							<overrideChildTca>
+								<columns>
+									<uid_local>
+										<config>
+											<appearance>
+												<elementBrowserType>file</elementBrowserType>
+												<elementBrowserAllowed>gif,jpg,jpeg,png</elementBrowserAllowed>
+											</appearance>
+										</config>
+									</uid_local>
+								</columns>
+							</overrideChildTca>
+							<filter>
+								<userFunc>TYPO3\CMS\Core\Resource\Filter\FileExtensionFilter->filterInlineChildren</userFunc>
+								<parameters>
+									<allowedFileExtensions></allowedFileExtensions>
+									<disallowedFileExtensions></disallowedFileExtensions>
+								</parameters>
+							</filter>
+							<appearance>
+								<useSortable>0</useSortable>
+								<headerThumbnail>
+									<field>uid_local</field>
+									<width>45</width>
+									<height>45c</height>
+								</headerThumbnail>
+								<enabledControls>
+									<info>1</info>
+									<new>0</new>
+									<dragdrop>0</dragdrop>
+									<sort>0</sort>
+									<hide>1</hide>
+									<delete>1</delete>
+								</enabledControls>
+							</appearance>
+						</config>
 					</settings.consent.thumbnail>
 
 					<settings.consent.height>
-						<TCEforms>
-							<label>Min. height of the consent area or background-image (in px)</label>
-							<config>
-								<type>input</type>
-								<checkbox></checkbox>
-								<eval>int</eval>
-								<size>6</size>
-								<default>60</default>
-							</config>
-						</TCEforms>
+						<label>Min. height of the consent area or background-image (in px)</label>
+						<config>
+							<type>input</type>
+							<checkbox></checkbox>
+							<eval>int</eval>
+							<size>6</size>
+							<default>60</default>
+						</config>
 					</settings.consent.height>
 
 					<settings.consent.autoSize>
-						<TCEforms>
-							<label>Auto size for consent area or background-image</label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">none</numIndex>
-										<numIndex index="1">0</numIndex>
-									</numIndex>
-									<numIndex index="1" type="array">
-										<numIndex index="0">1by1</numIndex>
-										<numIndex index="1">ratio ratio-1x1</numIndex>
-									</numIndex>
-									<numIndex index="2" type="array">
-										<numIndex index="0">4by3</numIndex>
-										<numIndex index="1">ratio ratio-4x3</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
-										<numIndex index="0">16by9</numIndex>
-										<numIndex index="1">ratio ratio-16x9</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
-										<numIndex index="0">21by9</numIndex>
-										<numIndex index="1">ratio ratio-21x9</numIndex>
-									</numIndex>
-								</items>
-								<default>ratio ratio-16x9</default>
-							</config>
-						</TCEforms>
+						<label>Auto size (aspect ratio) for consent area or background-image</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items type="array">
+								<numIndex index="0" type="array">
+									<numIndex index="0">none</numIndex>
+									<numIndex index="1">0</numIndex>
+								</numIndex>
+								<numIndex index="1" type="array">
+									<numIndex index="0">1by1</numIndex>
+									<numIndex index="1">ratio ratio-1x1</numIndex>
+								</numIndex>
+								<numIndex index="2" type="array">
+									<numIndex index="0">4by3</numIndex>
+									<numIndex index="1">ratio ratio-4x3</numIndex>
+								</numIndex>
+								<numIndex index="3" type="array">
+									<numIndex index="0">16by9</numIndex>
+									<numIndex index="1">ratio ratio-16x9</numIndex>
+								</numIndex>
+								<numIndex index="4" type="array">
+									<numIndex index="0">21by9</numIndex>
+									<numIndex index="1">ratio ratio-21x9</numIndex>
+								</numIndex>
+							</items>
+							<default>ratio ratio-16x9</default>
+						</config>
 					</settings.consent.autoSize>
+
+					<settings.consent.removeRatio>
+						<label>Remove class "ratio" (if set) from "mainframe" after loading by ajax</label>
+						<config>
+							<type>check</type>
+							<default>1</default>
+						</config>
+					</settings.consent.removeRatio>
 
 				</el>
 			</ROOT>
