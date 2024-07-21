@@ -1,16 +1,23 @@
 <?php
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 defined('TYPO3') || die();
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+ExtensionUtility::registerPlugin(
 	'ContentConsent',
 	'All',
 	'Content consent',
-	'contentconsenticon'
+	'contentconsenticon',
+	'plugins',
+	'Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps, YouTube- or Vimeo videos GDPR/DSGVO compliant. Best used with Bootstrap 5'
 );
 
-$extensionName = \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToUpperCamelCase('content_consent');
+$extensionName = GeneralUtility::underscoredToUpperCamelCase('content_consent');
 $pluginSignature = strtolower($extensionName) . '_all';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:content_consent/Configuration/FlexForms/Consent.xml');
+ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:content_consent/Configuration/FlexForms/Consent.xml');
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['contentconsent_all']='layout,select_key,pages,recursive,pages';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['contentconsent_all']='layout,select_key,pages,recursive';

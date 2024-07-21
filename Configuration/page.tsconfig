@@ -1,0 +1,8 @@
+
+mod.web_layout {
+	tt_content {
+		preview {
+			list = EXT:content_consent/Resources/Private/Templates/Preview/Index.html
+		}
+	}
+}
