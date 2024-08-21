@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace T3S\ContentConsent\Controller;
 
@@ -7,7 +6,6 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -24,7 +22,8 @@ class ConsentController extends ActionController
 	public function __construct(
 		private readonly FileRepository $fileRepository,
 		private readonly ContentObjectRenderer $contentObjectRenderer,
-		private readonly Typo3Version $typo3Version
+		private readonly Typo3Version $typo3Version,
+		private readonly CacheManager $cacheManager
 	) {}
 
 
@@ -83,8 +82,7 @@ class ConsentController extends ActionController
 		if ($this->typo3Version->getMajorVersion() < 13) {
 			$hash = GeneralUtility::hmac($this->settings['consent']['contentByUid'], self::class);
 		} else {
-			$hashService = GeneralUtility::makeInstance(HashService::class);
-			$hash = $hashService->hmac($this->settings['consent']['contentByUid'], self::class);
+			$hash = $this->hashService->hmac($this->settings['consent']['contentByUid'], self::class);
 		}
 
 		$assignedValues = [
@@ -117,9 +115,8 @@ class ConsentController extends ActionController
 				$expected = GeneralUtility::hmac($post['contentByUid'], self::class);
 				$success = hash_equals($expected, $post['hash']);
 			} else {
-				$hashService = GeneralUtility::makeInstance(HashService::class);
-				$expected = $hashService->hmac($post['contentByUid'], self::class);
-				$isValidHash = $hashService->validateHmac($post['contentByUid'], self::class, $expected);
+				$expected = $this->hashService->hmac($post['contentByUid'], self::class);
+				$isValidHash = $this->hashService->validateHmac($post['contentByUid'], self::class, $expected);
 				if ($isValidHash) {
 					$success = hash_equals($expected, $post['hash']);
 				}
@@ -136,7 +133,7 @@ class ConsentController extends ActionController
 			$conf['dontCheckPid'] = 1;
 			$data = $this->contentObjectRenderer->cObjGetSingle('RECORDS', $conf);
 
-			GeneralUtility::makeInstance(CacheManager::class)->flushCachesInGroup('pages');
+			$this->cacheManager->flushCachesInGroup('pages');
 
 			return $this->responseFactory->createResponse()
 				->withHeader('Content-Type', 'application/text')
