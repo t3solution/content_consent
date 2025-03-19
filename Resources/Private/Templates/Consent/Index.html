@@ -19,6 +19,15 @@
 		<f:if condition="{settings.consent.contentByUid}">
 			<f:then>
 				<f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
+				<f:asset.script identifier="vanilla-contentConsent-{settings.consent.contentByUid}">
+	// EXT:content_consent content-{settings.consent.contentByUid}
+	document.addEventListener('click', function (event) {
+		if (!event.target.matches('#trigger-button-{settings.consent.contentByUid}')) return;
+		event.preventDefault();
+		ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie});
+	}, false);	
+				</f:asset.script>
+				
 				<f:if condition="{customThumbnail}">
 					<f:then>
 						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
@@ -87,10 +96,9 @@
 		<div class="d-flex">
 			<button
 				id="trigger-button-{settings.consent.contentByUid}"
-				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto"
+				class="consent-btn btn btn-md btn-{settings.consent.buttonStyle} mx-auto"
 				type="button"
 				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{typeNum}')}"
-				onclick="ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie}); return false;"
 			>
 				{settings.consent.button}
 			</button>

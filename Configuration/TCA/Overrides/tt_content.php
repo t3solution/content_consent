@@ -18,6 +18,7 @@ if ($versionInfo->getMajorVersion() < 13) {
 		'Content consent',
 	);
 
+
 } else {
 
 	ExtensionUtility::registerPlugin(
