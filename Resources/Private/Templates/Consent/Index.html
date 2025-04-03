@@ -10,27 +10,36 @@
 		<f:variable name="minHeight">100%</f:variable>
     </f:else>
 </f:if>
-<div id="content-{settings.consent.contentByUid}" class="mainframe w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}" style="min-height:{minHeight}" data-hash="{hash}" data-removeratio="{settings.consent.removeRatio}">
+<div id="content-{settings.consent.contentByUid}" class="mainframe w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}" style="min-height:{minHeight}" data-hash="{hash}" data-removeratio="{settings.consent.removeRatio}">
 <f:if condition="{contentConsent}">
 	<f:then>
 		<f:cObject typoscriptObjectPath="lib.contentByUid" data="{settings.consent.contentByUid}" />
+		<f:if condition="{settings.consent.autoSize} && {settings.consent.removeRatio}">
+			<f:asset.script identifier="vanilla-contentConsent-{settings.consent.contentByUid}">
+	// EXT:content_consent content-{settings.consent.contentByUid}
+	let resultContainer = document.getElementById('content-{settings.consent.contentByUid}');
+	resultContainer.classList.remove('ratio');
+			</f:asset.script>
+		</f:if>
 	</f:then>
 	<f:else>
 		<f:if condition="{settings.consent.contentByUid}">
 			<f:then>
 				<f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
 				<f:asset.script identifier="vanilla-contentConsent-{settings.consent.contentByUid}">
+					<f:alias map="{ocb: '{', ccb: '}'}">
 	// EXT:content_consent content-{settings.consent.contentByUid}
-	document.addEventListener('click', function (event) {
-		if (!event.target.matches('#trigger-button-{settings.consent.contentByUid}')) return;
-		event.preventDefault();
-		ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie});
-	}, false);	
+	document.addEventListener('click', function (event) {ocb}
+	if (!event.target.matches('#trigger-button-{settings.consent.contentByUid}')) return;
+	event.preventDefault();
+	ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie});
+	{ccb}, false);
+					</f:alias>
 				</f:asset.script>
 				
 				<f:if condition="{customThumbnail}">
 					<f:then>
-						<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
+						<div class="t3s-content-consent"
 						 style="background: url({f:uri.image(image: '{customThumbnail}')}) no-repeat center; background-size: cover;min-height:{minHeight}">
 							<f:render section="Overlay" arguments="{_all}" />
 						</div>
