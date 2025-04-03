@@ -122,9 +122,8 @@
 					<settings.consent.height>
 						<label>Min. height of the consent area or background-image (in px)</label>
 						<config>
-							<type>input</type>
+							<type>number</type>
 							<checkbox></checkbox>
-							<eval>int</eval>
 							<size>6</size>
 							<default>60</default>
 						</config>

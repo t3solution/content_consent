@@ -8,7 +8,6 @@ use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Core\Cache\CacheManager;
 
 /*
  * This file is part of the TYPO3 extension content_consent.
@@ -22,8 +21,7 @@ class ConsentController extends ActionController
 	public function __construct(
 		private readonly FileRepository $fileRepository,
 		private readonly ContentObjectRenderer $contentObjectRenderer,
-		private readonly Typo3Version $typo3Version,
-		private readonly CacheManager $cacheManager
+		private readonly Typo3Version $typo3Version
 	) {}
 
 
@@ -125,7 +123,7 @@ class ConsentController extends ActionController
 
 		if (!empty($success)) {
 			if ( !empty($post['cookies'])) {
-				$cookieExpire = $this->settings['cookieExpire'] ? (int)$this->settings['cookieExpire'] : 30;
+				$cookieExpire = !empty($this->settings['cookieExpire']) ? (int)$this->settings['cookieExpire'] : 30;
 				setcookie('t3scontentconsent_'.(int)$post['currentRecord'], 'allow', time() + (86400 * $cookieExpire), '/');
 			}
 			$conf['tables'] = 'tt_content';
@@ -133,15 +131,12 @@ class ConsentController extends ActionController
 			$conf['dontCheckPid'] = 1;
 			$data = $this->contentObjectRenderer->cObjGetSingle('RECORDS', $conf);
 
-			$this->cacheManager->flushCachesInGroup('pages');
-
 			return $this->responseFactory->createResponse()
 				->withHeader('Content-Type', 'application/text')
 				->withBody($this->streamFactory->createStream($data));
-
 		} else {
-
 			$data = '<div class="alert alert-danger" role="alert">No Success!</div>';
+
 			return $this->responseFactory->createResponse()
 				->withHeader('Content-Type', 'application/text')
 				->withBody($this->streamFactory->createStream($data));

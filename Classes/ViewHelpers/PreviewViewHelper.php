@@ -10,6 +10,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+
 
 /**
  * This file is part of the TYPO3 extension content_consent.
@@ -43,8 +46,12 @@ class PreviewViewHelper extends AbstractViewHelper
 			if ($typo3Version->getMajorVersion() < 13) {
 				$editLink = '';
 			} else {
-				// @todo Adapt this example as soon as Extbase Request implements ServerRequestInterface	
-				$request = $GLOBALS['TYPO3_REQUEST'];
+
+				/** @var RenderingContext $renderingContext */
+				$renderingContext = $this->renderingContext;
+				/** @var RequestInterface $request */
+				$request = $renderingContext->getRequest();
+
 				$uriParameters = [
 					'edit' => [
 						'tt_content' => [$contentByUid => 'edit'],
@@ -52,6 +59,7 @@ class PreviewViewHelper extends AbstractViewHelper
 					'returnUrl' => $request->getAttribute('normalizedParams')->getRequestUrl(),
 				];
 	
+				/** @var UriBuilder $backendUriBuilder */
 				$backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 				$editHref = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
 				$editLink = '<a href="'.$editHref.'"><span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-open" data-identifier="actions-document-open" aria-hidden="true"><span class="icon-markup"><svg class="icon-color"><use xlink:href="/_assets/1ee1d3e909b58d32e30dcea666dd3224/Icons/T3Icons/sprites/actions.svg#actions-document-edit"></use></svg></span></span>  Edit tt_content_'.$contentByUid.'</a>';
