@@ -1,0 +1,36 @@
+
+plugin.tx_contentconsent_all {
+	view {
+		templateRootPaths {
+			0 = EXT:content_consent/Resources/Private/Templates/
+			1 = {$contentConsent.templates.templateRootPath}
+		}
+		layoutRootPaths {
+			0 = EXT:content_consent/Resources/Private/Layouts/
+			1 = {$contentConsent.templates.layoutRootPath}
+		}
+	}
+}
+
+
+ajaxCall = PAGE
+ajaxCall {
+	typeNum = {$contentConsent.ajaxTypeNum}
+	10 < tt_content.contentconsent_all.20
+	config {
+		disableAllHeaderCode = 1
+		xhtml_cleaning = 0
+		admPanel = 0
+		debug = 0
+		no_cache = 1
+	}
+}
+
+
+lib.contentByUid = RECORDS
+lib.contentByUid {
+	tables = tt_content
+	source.current = 1
+	dontCheckPid = 1
+}
+

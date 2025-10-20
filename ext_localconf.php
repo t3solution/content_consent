@@ -10,6 +10,8 @@ defined('TYPO3') || die();
 		'ContentConsent',
 		'All',
 		[ConsentController::class => 'index, ajax'],
-		[ConsentController::class => 'ajax']
+		[ConsentController::class => 'ajax'],
+		ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 	);
 })();
+

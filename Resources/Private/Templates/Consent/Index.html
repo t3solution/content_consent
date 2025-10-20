@@ -3,13 +3,14 @@
 <f:section name="content">
 <f:flashMessages />
 <f:if condition="{settings.consent.height}">
-    <f:then>
+	<f:then>
 		<f:variable name="minHeight">{settings.consent.height}px</f:variable>
-    </f:then>
-    <f:else>
+	</f:then>
+	<f:else>
 		<f:variable name="minHeight">100%</f:variable>
-    </f:else>
+	</f:else>
 </f:if>
+
 <div id="content-{settings.consent.contentByUid}" class="mainframe w-100 card border-0 rounded-0{f:if(condition: settings.consent.autoSize, then: ' {settings.consent.autoSize}')}{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}" style="min-height:{minHeight}" data-hash="{hash}" data-removeratio="{settings.consent.removeRatio}">
 <f:if condition="{contentConsent}">
 	<f:then>
@@ -27,16 +28,15 @@
 			<f:then>
 				<f:asset.script identifier="t3s-contentConsent" src="EXT:content_consent/Resources/Public/Scripts/contentconsent.js" />
 				<f:asset.script identifier="vanilla-contentConsent-{settings.consent.contentByUid}">
-					<f:alias map="{ocb: '{', ccb: '}'}">
+				<f:alias map="{ocb: '{', ccb: '}'}">
 	// EXT:content_consent content-{settings.consent.contentByUid}
 	document.addEventListener('click', function (event) {ocb}
 	if (!event.target.matches('#trigger-button-{settings.consent.contentByUid}')) return;
 	event.preventDefault();
 	ajaxConsentCall({settings.consent.contentByUid}, {currentRecord}, {settings.consent.cookie});
 	{ccb}, false);
-					</f:alias>
+				</f:alias>
 				</f:asset.script>
-				
 				<f:if condition="{customThumbnail}">
 					<f:then>
 						<div class="t3s-content-consent"
@@ -56,7 +56,7 @@
 									</f:else>
 								</f:if>
 								<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-							 	 style="background: url({videoThumbnail}) no-repeat center; background-size: cover; min-height:{minHeight}">
+								  style="background: url({videoThumbnail}) no-repeat center; background-size: cover; min-height:{minHeight}">
 									<f:render section="Overlay" arguments="{_all}" />
 								</div>
 							</f:then>
@@ -64,14 +64,14 @@
 								<f:if condition="{defaultThumbnail.originalFile.properties.identifier}">
 									<f:then>
 										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-									 	style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
+										 style="background: url({f:uri.image(image: '{defaultThumbnail}')}) no-repeat center; background-size: cover;
 										min-height:{minHeight}">
 											<f:render section="Overlay" arguments="{_all}" />
 										</div>
 									</f:then>
 									<f:else>
 										<div class="t3s-content-consent{f:if(condition: settings.consent.extraClass, then: ' {settings.consent.extraClass}')}"
-								 		style="min-height:{minHeight}">
+										 style="min-height:{minHeight}">
 											<f:render section="Overlay" arguments="{_all}" />
 										</div>
 									</f:else>
@@ -105,7 +105,7 @@
 		<div class="d-flex">
 			<button
 				id="trigger-button-{settings.consent.contentByUid}"
-				class="consent-btn btn btn-md btn-{settings.consent.buttonStyle} mx-auto"
+				class="btn btn-md btn-{settings.consent.buttonStyle} mx-auto consent-btn"
 				type="button"
 				data-url="{f:uri.action(action: 'ajax', controller: 'Consent', pluginName: 'All', pageType:'{typeNum}')}"
 			>

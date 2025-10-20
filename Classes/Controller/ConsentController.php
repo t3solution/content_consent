@@ -3,9 +3,7 @@
 namespace T3S\ContentConsent\Controller;
 
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Resource\FileRepository;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -20,10 +18,21 @@ class ConsentController extends ActionController
 
 	public function __construct(
 		private readonly FileRepository $fileRepository,
-		private readonly ContentObjectRenderer $contentObjectRenderer,
-		private readonly Typo3Version $typo3Version
+		private readonly ContentObjectRenderer $contentObjectRenderer
 	) {}
 
+
+	/**
+	 * init all actions
+	 */
+	public function initializeAction(): void
+	{ 
+		$siteSettings = $this->request->getAttribute('site')->getSettings();
+		$ajaxTypeNum = $siteSettings->get('contentConsent.ajaxTypeNum');
+		$this->settings['ajaxTypeNum'] = $ajaxTypeNum ?? 1667660331;
+		$cookieExpire = $siteSettings->get('contentConsent.cookieExpire');
+		$this->settings['cookieExpire'] = $cookieExpire ?? 30;
+	}
 
 	/**
 	 * action index
@@ -41,11 +50,9 @@ class ConsentController extends ActionController
 		$currentRecord = $this->request->getAttribute('currentContentObject')->data['uid'];
 
 		if ( $this->settings['consent']['cookie']
-		 && isset($_COOKIE['t3scontentconsent_'.$currentRecord])
-		 && $_COOKIE['t3scontentconsent_'.$currentRecord] == 'allow' ) {
-
+            && array_key_exists('t3scontentconsent_'.$currentRecord, $_COOKIE)
+            && $_COOKIE['t3scontentconsent_'.$currentRecord] === 'allow' ) {
 			$contentConsent = TRUE;
-
 		} else {
 
 			// Custom thumbnail
@@ -77,11 +84,7 @@ class ConsentController extends ActionController
 			}
 		}
 
-		if ($this->typo3Version->getMajorVersion() < 13) {
-			$hash = GeneralUtility::hmac($this->settings['consent']['contentByUid'], self::class);
-		} else {
-			$hash = $this->hashService->hmac($this->settings['consent']['contentByUid'], self::class);
-		}
+		$hash = $this->hashService->hmac($this->settings['consent']['contentByUid'], self::class);
 
 		$assignedValues = [
 			'currentRecord' => $currentRecord,
@@ -109,15 +112,10 @@ class ConsentController extends ActionController
 		$post = $this->request->getParsedBody();
 
 		if (!empty($post)) {
-			if ($this->typo3Version->getMajorVersion() < 13) {
-				$expected = GeneralUtility::hmac($post['contentByUid'], self::class);
+			$expected = $this->hashService->hmac($post['contentByUid'], self::class);
+			$isValidHash = $this->hashService->validateHmac($post['contentByUid'], self::class, $expected);
+			if ($isValidHash) {
 				$success = hash_equals($expected, $post['hash']);
-			} else {
-				$expected = $this->hashService->hmac($post['contentByUid'], self::class);
-				$isValidHash = $this->hashService->validateHmac($post['contentByUid'], self::class, $expected);
-				if ($isValidHash) {
-					$success = hash_equals($expected, $post['hash']);
-				}
 			}
 		}
 
@@ -134,9 +132,10 @@ class ConsentController extends ActionController
 			return $this->responseFactory->createResponse()
 				->withHeader('Content-Type', 'application/text')
 				->withBody($this->streamFactory->createStream($data));
-		} else {
-			$data = '<div class="alert alert-danger" role="alert">No Success!</div>';
 
+		} else {
+
+			$data = '<div class="alert alert-danger" role="alert">No Success!</div>';
 			return $this->responseFactory->createResponse()
 				->withHeader('Content-Type', 'application/text')
 				->withBody($this->streamFactory->createStream($data));
@@ -144,3 +143,4 @@ class ConsentController extends ActionController
 	}
 
 }
+

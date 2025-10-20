@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-namespace T3S\ContentConsent\ViewHelpers;
+namespace T3S\ContentConsent\ViewHelpers\Backend;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Service\FlexFormService;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-
 
 /**
  * This file is part of the TYPO3 extension content_consent.
@@ -41,30 +39,24 @@ class PreviewViewHelper extends AbstractViewHelper
 			$contentByUid = (int) $flexFormDataArr['settings']['consent']['contentByUid'];
 			$contentConsent = BackendUtility::getRecord('tt_content', $contentByUid);
 			$pageConsent = BackendUtility::getRecord('pages', $contentConsent['pid']);
-	
-			$typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-			if ($typo3Version->getMajorVersion() < 13) {
-				$editLink = '';
-			} else {
 
-				/** @var RenderingContext $renderingContext */
-				$renderingContext = $this->renderingContext;
-				/** @var RequestInterface $request */
-				$request = $renderingContext->getRequest();
+			/** @var RenderingContext $renderingContext */
+			$renderingContext = $this->renderingContext;
+			/** @var RequestInterface $request */
+			$request = $renderingContext->getRequest();
 
-				$uriParameters = [
-					'edit' => [
-						'tt_content' => [$contentByUid => 'edit'],
-					],
-					'returnUrl' => $request->getAttribute('normalizedParams')->getRequestUrl(),
-				];
-	
-				/** @var UriBuilder $backendUriBuilder */
-				$backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-				$editHref = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
-				$editLink = '<a href="'.$editHref.'"><span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-open" data-identifier="actions-document-open" aria-hidden="true"><span class="icon-markup"><svg class="icon-color"><use xlink:href="/_assets/1ee1d3e909b58d32e30dcea666dd3224/Icons/T3Icons/sprites/actions.svg#actions-document-edit"></use></svg></span></span>  Edit tt_content_'.$contentByUid.'</a>';
-			}
-	
+			$uriParameters = [
+				'edit' => [
+					'tt_content' => [$contentByUid => 'edit'],
+				],
+				'returnUrl' => $request->getAttribute('normalizedParams')->getRequestUrl(),
+			];
+
+			/** @var UriBuilder $backendUriBuilder */
+			$backendUriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+			$editHref = $backendUriBuilder->buildUriFromRoute('record_edit', $uriParameters);
+			$editLink = '<a href="'.$editHref.'"><span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-open" data-identifier="actions-document-open" aria-hidden="true"><span class="icon-markup"><svg class="icon-color"><use xlink:href="/_assets/1ee1d3e909b58d32e30dcea666dd3224/Icons/T3Icons/sprites/actions.svg#actions-document-edit"></use></svg></span></span>  Edit tt_content_'.$contentByUid.'</a>';
+
 			$preview = '<strong>Content Consent (loaded by Ajax):</strong></br></br>
 			<table class="table table-striped">
 				<tbody>
@@ -93,4 +85,5 @@ class PreviewViewHelper extends AbstractViewHelper
 
 		return $preview;
 	}
+
 }

@@ -1,0 +1,35 @@
+categories:
+  contentConsent:
+    label: 'Content Consent'
+  contentConsent.templates:
+    label: 'Templates'
+    parent: contentConsent
+
+settings:
+  contentConsent.templates.layoutRootPath:
+    label: 'Page layout path'
+    category: contentConsent.templates
+    description: 'Path to the layouts of the Content Consent.'
+    type: string
+    default: 'EXT:content_consent/Resources/Private/Layouts/'
+
+  contentConsent.templates.templateRootPath:
+    label: 'Page template path'
+    category: contentConsent.templates
+    description: 'Path to the templates of the Content Consent.'
+    type: string
+    default: 'EXT:content_consent/Resources/Private/Templates/'
+
+  contentConsent.ajaxTypeNum:
+      label: 'Page type'
+      category: contentConsent
+      description: 'Page type for ajax call'
+      type: int
+      default: 1667660331
+
+  contentConsent.cookieExpire:
+      label: 'Cookie expire'
+      category: contentConsent
+      description: 'Cookie expire in days for content consent'
+      type: int
+      default: 30
