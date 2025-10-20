@@ -123,7 +123,7 @@
 						<label>Min. height of the consent area or background-image (in px)</label>
 						<config>
 							<type>number</type>
-							<checkbox></checkbox>
+							<checkbox>0</checkbox>
 							<size>6</size>
 							<default>60</default>
 						</config>

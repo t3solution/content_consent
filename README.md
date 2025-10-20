@@ -1,16 +1,20 @@
 # TYPO3 Extension ``content_consent``
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/t3sbootstrap)
-[![Latest Stable Version](https://poser.pugx.org/t3s/content_consent/v/stable)](https://packagist.org/packages/t3s/content_consent)
-[![Monthly Downloads](https://poser.pugx.org/t3s/content_consent/d/monthly)](https://packagist.org/packages/t3s/content_consent)
-[![License](https://poser.pugx.org/t3s/content_consent/license)](https://packagist.org/packages/t3s/content_consent)
+[![Latest Stable Version](https://poser.pugx.org/t3s/content-consent/v/stable)](https://packagist.org/packages/t3s/content-consent)
+[![Monthly Downloads](https://poser.pugx.org/t3s/content-consent/d/monthly)](https://packagist.org/packages/t3s/content-consent)
+[![License](https://poser.pugx.org/t3s/content-consent/license)](https://packagist.org/packages/t3s/content-consent)
 
-> Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps, YouTube- or Vimeo videos GDPR/DSGVO compliant. Best used with Bootstrap 5.
+> Provides a plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps, YouTube- or Vimeo videos GDPR/DSGVO compliant. Best used with Bootstrap 5.
 
-## 1. Usage
+## Requirements
+
+- TYPO3 >= 13.1
+
+## Usage
 
 
-### 1) Installation
+### Installation
 
 #### Installation using Composer
 
@@ -21,5 +25,9 @@ The recommended way to install the extension is by using Composer. In your Compo
 #### Installation as extension from TYPO3 Extension Repository (TER)
 
 Download and install the extension with the extension manager module.
+
+### Include the Set "Content Consent" (TYPO3 13 only)
+
+Include the set "Content Consent" in your site configuration.
 
 More infos & demos: https://www.t3sbootstrap.de/extensions/content-consent

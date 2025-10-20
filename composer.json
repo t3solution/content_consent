@@ -2,6 +2,13 @@
     "name": "t3s/content-consent",
     "type": "typo3-cms-extension",
     "description": "Provides a content consent plugin to load any content elements and custom plugins by ajax without jQuery! So you can include Google Maps or YouTube videos GDPR/DSGVO compliant. Best used with Bootstrap 5",
+   "keywords": [
+        "TYPO3",
+        "extension",
+        "consent",
+        "GDPR",
+        "DSGVO"
+    ],
     "authors": [
         {
             "name": "Helmut Hackbarth",
@@ -10,24 +17,15 @@
     ],
     "license": "GPL-2.0-or-later",
     "require": {
-        "typo3/cms-core": "^12.4 || ^13.4"
+        "typo3/cms-core": "^13.1"
     },
     "autoload": {
         "psr-4": {
             "T3S\\ContentConsent\\": "Classes"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "T3S\\ContentConsent\\Tests\\": "Tests"
-        }
-    },
     "replace": {
         "typo3-ter/content-consent": "self.version"
-    },
-    "config": {
-        "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
     },
     "extra": {
         "typo3/cms": {
