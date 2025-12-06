@@ -47,8 +47,7 @@ class ConsentController extends ActionController
 		$properties = [];
 		$extension = '';
 		$type = 0;
-		$currentRecord = $this->request->getAttribute('currentContentObject')->data['uid'];
-
+		$currentRecord = $this->request->getAttribute('currentContentObject')->data['uid'];	
 		if ( $this->settings['consent']['cookie']
             && array_key_exists('t3scontentconsent_'.$currentRecord, $_COOKIE)
             && $_COOKIE['t3scontentconsent_'.$currentRecord] === 'allow' ) {
