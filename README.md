@@ -26,7 +26,7 @@ The recommended way to install the extension is by using Composer. In your Compo
 
 Download and install the extension with the extension manager module.
 
-### Include the Set "Content Consent"
+### Include the Set "Content Consent" (TYPO3 13 only)
 
 Include the set "Content Consent" in your site configuration.
 

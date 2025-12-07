@@ -9,6 +9,7 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 
 #[UpgradeWizard('contentConsent_pluginListTypeToCTypeUpdate')]
 final class PluginListTypeToCTypeUpdate implements UpgradeWizardInterface
@@ -26,7 +27,7 @@ final class PluginListTypeToCTypeUpdate implements UpgradeWizardInterface
 
 	public function executeUpdate(): bool
 	{
-
+		
 		$connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
 		$queryBuilder = $connectionPool->getQueryBuilderForTable('tt_content');
 
@@ -50,6 +51,7 @@ final class PluginListTypeToCTypeUpdate implements UpgradeWizardInterface
 		}
 
 		return TRUE;
+	
 	}
 
 
@@ -73,22 +75,29 @@ final class PluginListTypeToCTypeUpdate implements UpgradeWizardInterface
 
 	protected function checkIfWizardIsRequired(): bool
 	{
-		$connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-		$queryBuilder = $connectionPool->getQueryBuilderForTable('tt_content');
 
-		$numberOfCEs = $queryBuilder
-			->count('uid')
-			->from('tt_content')
-			->where(
-				$queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter('list', Connection::PARAM_STR)),
-				$queryBuilder->expr()->eq('list_type', $queryBuilder->createNamedParameter('contentconsent_all', Connection::PARAM_STR))
-			)
-			->executeQuery()
-			->fetchOne();
+		$majorVersion = GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion();
+		
+		if ( $majorVersion == 13 ) {
 
-		if ( $numberOfCEs > 0 ) {
-			
-			return TRUE;
+			$connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+			$queryBuilder = $connectionPool->getQueryBuilderForTable('tt_content');
+	
+			$numberOfCEs = $queryBuilder
+				->count('uid')
+				->from('tt_content')
+				->where(
+					$queryBuilder->expr()->eq('CType', $queryBuilder->createNamedParameter('list', Connection::PARAM_STR)),
+					$queryBuilder->expr()->eq('list_type', $queryBuilder->createNamedParameter('contentconsent_all', Connection::PARAM_STR))
+				)
+				->executeQuery()
+				->fetchOne();
+	
+			if ( $numberOfCEs > 0 ) {
+				
+				return TRUE;
+			}
+
 		}
 
 		return FALSE;
